@@ -61,9 +61,3 @@ tasks {
         dependsOn(fatJar)
     }
 }
-
-jar {
-    manifest {
-
-    }
-}
