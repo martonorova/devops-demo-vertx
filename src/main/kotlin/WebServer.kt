@@ -77,10 +77,25 @@ class WebServer(
                     }
                 }
                 addHandlerByOperationId("clearVisitorBook") {
-                    logger.info("clearVisitorBook called")
+                    logger.info("deleteFromVisitorBook called")
                     visitors.clear()
                     it.response().setStatusMessage("Visitor book cleared").setStatusCode(200).end(JsonObject().put("message", "done").encodePrettily())
                 }
+
+                addHandlerByOperationId("getVisitorBook") {
+                    logger.info("getVisitorBook called")
+                    val jsonObject = JsonObject.mapFrom(VisitorList(visitors))
+                    it.response().end(jsonObject.encodePrettily())
+                }
+
+//                addHandlerByOperationId("deleteNameFromVisitorBook") {
+//                    val params: RequestParameters = it.get("parsedParameters")
+//                    val name = params.body().jsonObject.getString("userName")
+//                    logger.info("deleteNameFromVisitorBook called with $name")
+//
+//                    visitors.remove(name)
+//                    it.response().setStatusMessage("$name removed from visitor book").setStatusCode(200).end(JsonObject().put("message", "done").encodePrettily())
+//                }
 
             }
 

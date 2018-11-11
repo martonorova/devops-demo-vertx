@@ -3,28 +3,31 @@ info:
   version: 0.1.0
   title: Example Web API
 servers:
-  - url: /api
+- url: /api
 tags:
-  - name: my tag
-    description: |
-      This is my special tag
+- name: my tag
+  description: |
+    This is my special tag
+- name: extra tag
+  description: |
+    Newly added endpoints
 paths:
   /helloMessage:
     get:
       summary: Get hello message from server
       operationId: getHelloMessage
       tags:
-        - my tag
+      - my tag
       description: |
         Get a special, unique hello message from the server
       parameters:
-        - name: name
-          in: query
-          required: true
-          description: |
-            Send your name so the server can say hello
-          schema:
-            type: string
+      - name: name
+        in: query
+        required: true
+        description: |
+          Send your name so the server can say hello
+        schema:
+          type: string
       responses:
         '200':
           description: Hello message
@@ -35,11 +38,33 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedError'
   /visitorBook:
+    get:
+      summary: Get all the names in the visitor book
+      operationId: getVisitorBook
+      tags:
+      - extra tag
+      description: Return all names in the visitor book
+      responses:
+        '200':
+          description: Names in the visitor book returned
+          content:
+            application/json:
+              schema:
+                required:
+                - visitors
+                properties:
+                  visitors:
+                    type: array
+                    items:
+                      type: string
+                      example: 'Visitor'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
     post:
       summary: Sign visitor book with my name
       operationId: signVisitorBook
       tags:
-        - my tag
+      - my tag
       description: |
         Send your name to add it to the list of previous visitors
       requestBody:
@@ -50,7 +75,7 @@ paths:
           application/json:
             schema:
               required:
-                - name
+              - name
               properties:
                 name:
                   type: string
@@ -62,7 +87,7 @@ paths:
             application/json:
               schema:
                 required:
-                  - visitors
+                - visitors
                 properties:
                   visitors:
                     type: array
@@ -72,7 +97,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedError'
     delete:
-      summary: Clear visitor book
+      summary: Delete visitor book
       operationId: clearVisitorBook
       responses:
         '200':
@@ -85,6 +110,23 @@ paths:
                     type: string
         default:
           $ref: '#/components/responses/UnexpectedError'
+#  /visitorBook/{visitorName}:
+#    delete:
+#      summary: Delete name from visitor book
+#      operationId: deleteNameFromVisitorBook
+#      parameters:
+#      - in: path
+#        name: visitorName
+#        schema:
+#          type: string
+#        required: true
+#        description: name of the visitor to remove from visitor book
+#      responses:
+#        '200':
+#          description: Name removed from visitor book
+#        default:
+#          $ref: '#/components/responses/UnexpectedError'
+
 
 components:
   responses:
@@ -97,15 +139,15 @@ components:
   schemas:
     HelloMessage:
       required:
-        - message
+      - message
       properties:
         message:
           type: string
           example: 'Hello OpenAPI'
     Error:
       required:
-        - code
-        - message
+      - code
+      - message
       properties:
         code:
           type: integer
